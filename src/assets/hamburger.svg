@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg
+  version='1.1'
+  viewBox='0 0 20 20'
+  xml:space='preserve'
+  xmlns='http://www.w3.org/2000/svg'
+  xmlns:xlink='http://www.w3.org/1999/xlink'
+  >
+  <g
+    clip-rule='evenodd'
+    fill-rule='evenodd'
+    >
+    <path
+      d='
+        M3 5
+        a1 1 0 011-1
+        h12
+        a1 1 0 110 2
+        H4
+        a1 1 0 01-1-1z
+        M3 10
+        a1 1 0 011-1
+        h12
+        a1 1 0 110 2
+        H4
+        a1 1 0 01-1-1z
+        M3 15
+        a1 1 0 011-1
+        h12
+        a1 1 0 110 2
+        H4a1 1 0 01-1-1z
+      '
+      fill='currentColor'
+    />
+  </g>
+</svg>

@@ -1,0 +1,18 @@
+# Environment variable
+**/.env
+
+# Node
+dist
+node_modules
+
+# OSX
+**/.DS_Store
+
+# Python
+**/__pycache__
+venv
+
+# Workspace settings
+.idea
+.ignore
+.vscode
