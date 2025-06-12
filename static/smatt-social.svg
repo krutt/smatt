@@ -142,7 +142,7 @@
     <tspan
       dy='2rem'
       x='32rem'>
-      by CHECKCONTRACTVERIFY opcode
+      by OP_CHECKCONTRACTVERIFY
     </tspan>
   </text>
   <g filter='url(#dropShadowLite)'>

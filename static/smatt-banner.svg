@@ -103,7 +103,7 @@
       Merkleize All The Things Framework for Bitcoin Smart
     </tspan>
     <tspan dy='1.6rem' x='16.5rem'>
-      Contracts powered by CHECKCONTRACTVERIFY opcode
+      Contracts powered by OP_CHECKCONTRACTVERIFY
     </tspan>
   </text>
 </svg>
