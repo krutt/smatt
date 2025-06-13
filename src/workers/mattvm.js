@@ -9,9 +9,7 @@ const pyodide = await loadPyodide({
   stderr: text => console.error,
   stdout: text => console.log,
 })
-await pyodide.loadPackage('micropip', { checkIntegrity: false })
-const micropip = pyodide.pyimport('micropip')
-await micropip.install('pymatt')
+await pyodide.loadPackage('/smatt/pymatt-0.0.1-py3-none-any.whl', { checkIntegrity: true })
 
 const decoder = new TextDecoder()
 let inputData = null
