@@ -84,11 +84,11 @@ Notable exemptions: `dotfiles`, `lockfile` and `component library generated file
 2. [Merkleize All The Things](https://merkle.fun)
   by [Salvatore Ingala](https://salvatoshi.com) [𝕏 @salvatoshi](https://x.com/salvatoshi)
 3. [BIP-443: OP_CHECKCONTRACTVERIFY](https://github.com/bitcoin/bips/blob/master/bip-0443.mediawiki)
-4. [VitePress Python Editor](https://github.com/zqianem/vitepress-python-editor)
+4. [YT: Merkleize All The Things (MATT) - Advancing Bitcoin | March 2nd, 2023](https://youtu.be/56_rItUgrbA)
+5. [YT: sMATT contracts, zero to hero - bitcoin++ | May 3rd, 2024](https://youtu.be/BvXI1IOargk)
+6. [VitePress Python Editor](https://github.com/zqianem/vitepress-python-editor)
   by [@zqianem](https://github.com/zqianem)
-5. [YT: Merkleize All The Things (MATT) - Advancing Bitcoin 2023](https://youtu.be/56_rItUgrbA)
-5. [YT: sMATT contracts, zero to hero - bitcoin++](https://youtu.be/BvXI1IOargk)
-6. [YT: Build in-browser 3D experiences with WebGL and PyScript](https://youtu.be/NQyzFbYZjHk)
+7. [YT: Build in-browser 3D experiences with WebGL and PyScript](https://youtu.be/NQyzFbYZjHk)
   by [Łukasz Langa](https://lukasz.langa.pl)
   at [Pycon US](https://us.pycon.org) 2024
 
