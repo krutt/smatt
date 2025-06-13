@@ -5,7 +5,12 @@ module.exports = {
     './src/**/*.{vue,js,ts,jsx,tsx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        bitcoin: ['Ubuntu Bold Italic', 'Arial', 'sans-serif'],
+        lookTour: ['Look Tour', 'Spartan', 'serif'],
+      },
+    },
   },
   plugins: [
     require('@tailwindcss/typography')

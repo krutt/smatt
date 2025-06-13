@@ -1,0 +1,40 @@
+/* ~~/src/assets/main.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Look Tour';
+  size-adjust: 150%;
+  src: url(./look-tour.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Ubuntu Bold Italic';
+  font-style: italic;
+  font-weight: bold;
+  src: url(./ubuntu-bold-italic.ttf) format('truetype');
+}
+
+@layer base {
+  html {
+    --color-black: #1b1b1e;
+    --color-white: #f9fafa;
+  }
+  html[data-theme='light'] {
+    --color-primary: #567965;
+    --color-secondary: #d2757c;
+    --color-tertiary: #69a4ce;
+
+    background: #f9fafa;
+    color: #1b1b1e;
+  }
+  html[data-theme='dark'] {
+    --color-primary: #f9cefd;
+    --color-secondary: #b6fbb1;
+    --color-tertiary: #fbf5a8;
+
+    background: #1b1b1e;
+    color: #f9fafa;
+  }
+}
