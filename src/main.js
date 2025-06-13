@@ -4,7 +4,7 @@ import App from '@/App.vue'
 import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import { createPinia } from 'pinia'
-import './assets/main.css'
+import './assets/styles.css'
 
 /* routes */
 let router = createRouter({
