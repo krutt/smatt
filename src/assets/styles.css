@@ -5,7 +5,7 @@
 
 @font-face {
   font-family: 'Look Tour';
-  size-adjust: 150%;
+  size-adjust: 200%;
   src: url(./look-tour.ttf) format('truetype');
 }
 
@@ -23,34 +23,35 @@
 
     --vp-code-font-size: 0.875em;
     --vp-code-line-height: 1.7;
-    --vp-font-family-mono: ui-monospace, 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace;    
+    --vp-font-family-mono: ui-monospace, 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono',
+      'Courier New', monospace;
 
-    --vp-c-brand-1: #3451B2;
-    --vp-c-brand-2: #3A5CCC;
-    --vp-code-block-bg: #F6F6F7;
-    --vp-code-block-divider-color: #E2E2E3;
-    --vp-code-copy-code-bg: #F6F6F7;
-    --vp-code-copy-code-border-color: ##E2E2E3;
-    --vp-code-copy-code-hover-bg: #FFFFFF;
-    --vp-code-copy-code-hover-border-color: #E2E2E3;
+    --vp-c-brand-1: #3451b2;
+    --vp-c-brand-2: #3a5ccc;
+    --vp-code-block-bg: #f6f6f7;
+    --vp-code-block-divider-color: #e2e2e3;
+    --vp-code-copy-code-bg: #f6f6f7;
+    --vp-code-copy-code-border-color: ##e2e2e3;
+    --vp-code-copy-code-hover-bg: #ffffff;
+    --vp-code-copy-code-hover-border-color: #e2e2e3;
     --vp-code-line-highlight-color: rgba(142, 150, 170, 0.14);
-    --vp-code-line-number-color: #67676C;
+    --vp-code-line-number-color: #67676c;
   }
   html[data-theme='light'] {
     --color-primary: #567965;
     --color-secondary: #d2757c;
     --color-tertiary: #69a4ce;
 
-    --vp-c-brand-1: #3451B2;
-    --vp-c-brand-2: #3A5CCC;
-    --vp-code-block-bg: #F6F6F7;
-    --vp-code-block-divider-color: #E2E2E3;
-    --vp-code-copy-code-bg: #F6F6F7;
-    --vp-code-copy-code-border-color: ##E2E2E3;
-    --vp-code-copy-code-hover-bg: #FFFFFF;
-    --vp-code-copy-code-hover-border-color: #E2E2E3;
+    --vp-c-brand-1: #3451b2;
+    --vp-c-brand-2: #3a5ccc;
+    --vp-code-block-bg: #f6f6f7;
+    --vp-code-block-divider-color: #e2e2e3;
+    --vp-code-copy-code-bg: #f6f6f7;
+    --vp-code-copy-code-border-color: ##e2e2e3;
+    --vp-code-copy-code-hover-bg: #ffffff;
+    --vp-code-copy-code-hover-border-color: #e2e2e3;
     --vp-code-line-highlight-color: rgba(142, 150, 170, 0.14);
-    --vp-code-line-number-color: #67676C;
+    --vp-code-line-number-color: #67676c;
 
     background: #f9fafa;
     color: #1b1b1e;
@@ -60,16 +61,16 @@
     --color-secondary: #b6fbb1;
     --color-tertiary: #fbf5a8;
 
-    --vp-c-brand-1: #A8B1FF;
-    --vp-c-brand-2: #5C73E7;
+    --vp-c-brand-1: #a8b1ff;
+    --vp-c-brand-2: #5c73e7;
     --vp-code-block-bg: #161618;
     --vp-code-block-divider-color: #000000;
     --vp-code-copy-code-bg: #202127;
-    --vp-code-copy-code-border-color: #2E2E32;
-    --vp-code-copy-code-hover-bg: #1B1B1F;
-    --vp-code-copy-code-hover-border-color: #2E2E32;
+    --vp-code-copy-code-border-color: #2e2e32;
+    --vp-code-copy-code-hover-bg: #1b1b1f;
+    --vp-code-copy-code-hover-border-color: #2e2e32;
     --vp-code-line-highlight-color: rgba(101, 117, 133, 0.16);
-    --vp-code-line-number-color: #98989F;
+    --vp-code-line-number-color: #98989f;
 
     background: #1b1b1e;
     color: #f9fafa;

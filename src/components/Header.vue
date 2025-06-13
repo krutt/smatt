@@ -1,5 +1,6 @@
 <script setup>
 /* imports */
+import Krutt from '@/assets/krutt.svg'
 import GitHub from '@/assets/github.svg'
 import Hamburger from '@/assets/hamburger.svg'
 
@@ -18,18 +19,19 @@ let menuOpen = ref(false)
   >
     <div class="container flex flex-wrap items-center justify-between mx-auto">
       <a href="/smatt/" class="flex items-center">
-        <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white"
-          >sMATT</span
+        <Krutt />
+        <span class="font-lookTour self-center text-xl whitespace-nowrap dark:text-white"
+          >smatt</span
         >
       </a>
       <div class="flex md:order-2">
         <button
           @click.prevent="menuOpen = !menuOpen"
-          data-collapse-toggle="navbar-sticky"
-          type="button"
-          class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-          aria-controls="navbar-sticky"
           :aria-expanded="menuOpen"
+          aria-controls="navbar-sticky"
+          data-collapse-toggle="navbar-sticky"
+          class="dark:focus:ring-gray-600 dark:hover:bg-gray-700 dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200 inline-flex items-center hover:bg-gray-100 md:hidden p-2 rounded-lg text-gray-500 text-sm"
+          type="button"
         >
           <span class="sr-only">Open main menu</span>
           <Hamburger aria-hidden="true" class="w-6 h-6" />
@@ -55,10 +57,10 @@ let menuOpen = ref(false)
           <li>
             <a
               @click.preventDefault="goToGitHub"
-              class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-white dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+              class="inline-flex py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-white dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
             >
               View on GitHub
-              <GitHub />
+              <GitHub class="h-6 ml-2 w-6" />
             </a>
           </li>
         </ul>
