@@ -29,9 +29,6 @@ importers:
       '@lezer/highlight':
         specifier: ^1.2.1
         version: 1.2.1
-      marked:
-        specifier: ^14.1.4
-        version: 14.1.4
       pinia:
         specifier: ^2.3.1
         version: 2.3.1(vue@3.5.16)
@@ -858,11 +855,6 @@ packages:
 
   magic-string@0.30.17:
     resolution: {integrity: sha512-sNPKHvyjVf7gyjwS4xGTaW/mCnF8wnjtifKBEhxfZ7E/S8tQ0rssrwGNn6q8JH/ohItJfSQp9mBtQYuTlH5QnA==}
-
-  marked@14.1.4:
-    resolution: {integrity: sha512-vkVZ8ONmUdPnjCKc5uTRvmkRbx4EAi2OkTOXmfTDhZz3OFqMNBM1oTTWwTr4HY4uAEojhzPf+Fy8F1DWa3Sndg==}
-    engines: {node: '>= 18'}
-    hasBin: true
 
   mdn-data@2.0.28:
     resolution: {integrity: sha512-aylIc7Z9y4yzHYAJNuESG3hfhC+0Ibp/MAMiaOZgNv4pmEdFyfZhhhny4MNiAfWdBQ1RQ2mfDWmM1x8SvGyp8g==}
@@ -1961,8 +1953,6 @@ snapshots:
   magic-string@0.30.17:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.0
-
-  marked@14.1.4: {}
 
   mdn-data@2.0.28: {}
 
