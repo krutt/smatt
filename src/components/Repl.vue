@@ -1,11 +1,11 @@
 <script setup>
 import {
   EditorView,
-  highlightSpecialChars,
   drawSelection,
+  highlightActiveLine,
+  highlightSpecialChars,
   keymap,
   lineNumbers,
-  highlightActiveLine,
 } from '@codemirror/view'
 import Loading from '@/assets/loading.svg'
 import Ready from '@/assets/ready.svg'
