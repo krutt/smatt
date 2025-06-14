@@ -1,4 +1,4 @@
-/* ~~/vite.config.js */
+/* ~~/vite.config.ts */
 
 import autoImport from 'unplugin-auto-import/vite'
 import autoprefixer from 'autoprefixer'

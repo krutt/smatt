@@ -1,28 +1,27 @@
-/* ~~/src/workers/mattvm.js */
+/* ~~/src/workers/mattvm.ts */
 
 // imports
 import { loadPyodide } from 'pyodide'
 
 const pyodide = await loadPyodide({
-  checkIntegrity: false,
   indexURL: import.meta.env.BASE_URL,
-  stderr: text => console.error,
-  stdout: text => console.log,
+  stderr: () => console.error,
+  stdout: () => console.log,
 })
 await pyodide.loadPackage('/smatt/pymatt-0.0.1-py3-none-any.whl', { checkIntegrity: true })
 
-const decoder = new TextDecoder()
+const decoder: TextDecoder = new TextDecoder()
 let inputData = null
 let waitFlag = null
 
-onmessage = async e => {
-  if (e.data.inputBuffer && e.data.waitBuffer && e.data.interruptBuffer) {
-    inputData = new Uint8Array(e.data.inputBuffer)
-    waitFlag = new Int32Array(e.data.waitBuffer)
-    pyodide.setInterruptBuffer(e.data.interruptBuffer)
+onmessage = async (event: MessageEvent) => {
+  if (event.data.inputBuffer && event.data.waitBuffer && event.data.interruptBuffer) {
+    inputData = new Uint8Array(event.data.inputBuffer)
+    waitFlag = new Int32Array(event.data.waitBuffer)
+    pyodide.setInterruptBuffer(event.data.interruptBuffer)
     return
   }
-  const { id, code } = e.data
+  const { id, code } = event.data
   pyodide.setStdout({
     write: buf => {
       postMessage({ id, output: decoder.decode(buf) })
@@ -33,8 +32,8 @@ onmessage = async e => {
     stdin: () => {
       postMessage({ id, input: true })
       Atomics.wait(waitFlag, 0, 0)
-      const inputArray = new Uint8Array(Atomics.load(inputData, 0))
-      for (let i = 0; i < inputArray.length; i++) inputArray[i] = Atomics.load(inputData, i + 1)
+      const inputArray = new Uint8Array(Number(Atomics.load(inputData, 0)))
+      for (let i = 0; i < inputArray.length; i++) inputArray[i] = Number(Atomics.load(inputData, i + 1))
       const inputText = decoder.decode(inputArray)
       postMessage({ id, output: `${inputText}\n` })
       return inputText
@@ -47,13 +46,13 @@ onmessage = async e => {
     await pyodide.runPythonAsync(code, { filename: '<editor>', globals, locals: globals })
     globals.destroy()
     dict.destroy()
-  } catch (err) {
-    if (err instanceof Error && err.constructor.name === 'PythonError') {
-      let lines = err.message.split('\n')
+  } catch (error) {
+    if (error instanceof Error && error.constructor.name === 'PythonError') {
+      let lines = error.message.split('\n')
       let output = lines.slice(lines.findIndex(line => line.includes('File "<editor>"'))).join('\n')
       if (!output.endsWith('KeyboardInterrupt\n')) postMessage({ id, output })
     } else {
-      throw err
+      throw error
     }
   } finally {
     postMessage({ id, done: true })

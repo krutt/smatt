@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 /* imports */
 import Krutt from '@/assets/krutt.svg'
 import GitHub from '@/assets/github.svg'
@@ -18,7 +18,7 @@ let menuOpen = ref(false)
     class="bg-white mt-0 px-2 sm:px-4 py-2.5 dark:bg-gray-900 fixed w-full z-20 top-0 left-0 border-b border-gray-200 dark:border-gray-600"
   >
     <div class="container flex flex-wrap items-center justify-between mx-auto">
-      <a href="/smatt/" class="flex items-center">
+      <a href="/" class="flex items-center">
         <Krutt />
         <span class="font-lookTour self-center text-xl whitespace-nowrap dark:text-white"
           >smatt</span

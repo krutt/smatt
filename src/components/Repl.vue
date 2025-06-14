@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import {
   EditorView,
   drawSelection,
@@ -23,7 +23,7 @@ let ready = ref(false)
 let encoder = new TextEncoder()
 
 let props = { id: 'temp' } // TODO: defineProps
-let slots = useSlots()
+// let slots = useSlots()
 let storageKey = computed(() => `code-editor-${props.id}`)
 
 let mounted = ref(false)
@@ -39,7 +39,7 @@ let editor
 onMounted(() => {
   // initialize one worker per session shared by all editor instances
   if (!worker) {
-    worker = new Worker(new URL('@/workers/mattvm.js', import.meta.url), { type: 'module' })
+    worker = new Worker(new URL('@/workers/mattvm.ts', import.meta.url), { type: 'module' })
     let inputBuffer = new SharedArrayBuffer(1024)
     inputData = new Uint8Array(inputBuffer)
     let waitBuffer = new SharedArrayBuffer(4)

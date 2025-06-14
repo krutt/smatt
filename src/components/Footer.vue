@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import GithubIcon from '@/assets/github.svg'
 </script>
 <template>

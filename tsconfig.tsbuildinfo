@@ -1,0 +1,1 @@
+{"root":["./auto-imports.d.ts","./src/main.ts","./src/components/codemirror-styling.ts","./src/components/pythonbuiltin.ts","./src/stores/contracts.ts","./src/workers/mattvm.ts","./src/app.vue","./src/components/footer.vue","./src/components/header.vue","./src/components/repl.vue","./src/views/home.vue"],"version":"5.8.3"}

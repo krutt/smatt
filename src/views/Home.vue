@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import Repl from '@/components/Repl.vue'
 </script>
 <template>
