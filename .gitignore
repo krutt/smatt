@@ -1,18 +1,18 @@
-# Environment variable
+# environment variable
 **/.env
 
-# Node
+
+# node
 dist
 node_modules
+tsconfig.tsbuildinfo
 
-# OSX
+
+# macos
 **/.DS_Store
 
-# Python
-**/__pycache__
-venv
 
-# Workspace settings
+# workspace settings
 .idea
 .ignore
 .vscode
