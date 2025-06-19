@@ -8,6 +8,7 @@ export {}
 declare global {
   const EffectScope: typeof import('vue')['EffectScope']
   const acceptHMRUpdate: typeof import('pinia')['acceptHMRUpdate']
+  const alby: typeof import('./src/stores/alby')['default']
   const computed: typeof import('vue')['computed']
   const contracts: typeof import('./src/stores/contracts')['default']
   const createApp: typeof import('vue')['createApp']
@@ -64,8 +65,10 @@ declare global {
   const toRef: typeof import('vue')['toRef']
   const toRefs: typeof import('vue')['toRefs']
   const toValue: typeof import('vue')['toValue']
+  const toast: typeof import('vue-sonner')['toast']
   const triggerRef: typeof import('vue')['triggerRef']
   const unref: typeof import('vue')['unref']
+  const useAlby: typeof import('./src/stores/alby')['useAlby']
   const useAttrs: typeof import('vue')['useAttrs']
   const useColorMode: typeof import('@vueuse/core')['useColorMode']
   const useContracts: typeof import('./src/stores/contracts')['useContracts']
