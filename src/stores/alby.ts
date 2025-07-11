@@ -8,16 +8,16 @@ export const useAlby = defineStore('alby', () => {
 
   // funcs
   let connectWallet = async () => {
-    if (typeof window.webbtc !== 'undefined') {
-      await window.webbtc.enable()
-      let response = await window.webbtc.getAddress()
-      storeAddress(response.address)
-      storeDerivationPath(response.derivationPath)
-      storePublicKey(response.publicKey)
-      toast.success('Connected', {
-        description: 'Successfully connected Alby Wallet Extension',
-      })
-    }
+    // if (typeof window.webbtc !== 'undefined') {
+    //   await window.webbtc.enable()
+    //   let response = await window.webbtc.getAddress()
+    //   storeAddress(response.address)
+    //   storeDerivationPath(response.derivationPath)
+    //   storePublicKey(response.publicKey)
+    //   toast.success('Connected', {
+    //     description: 'Successfully connected Alby Wallet Extension',
+    //   })
+    // }
   }
 
   let storeAddress = value => {
