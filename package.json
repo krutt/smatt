@@ -7,11 +7,8 @@
     "@codemirror/view": "^6.37.2",
     "@lezer/common": "^1.2.3",
     "@lezer/highlight": "^1.2.1",
-    "clsx": "^2.1.1",
     "pinia": "^2.3.1",
     "pyodide": "^0.27.7",
-    "tailwind-merge": "^3.3.1",
-    "tailwindcss-animate": "^1.0.7",
     "vue": "^3.5.17",
     "vue-router": "^4.5.1",
     "vue-sonner": "^2.0.0"
@@ -53,6 +50,5 @@
     "preview": "vite preview"
   },
   "type": "module",
-  "version": "0.1.0",
-  "packageManager": "pnpm@9.2.0+sha1.886364ebd6dae009284bebc56ed4296bb6dd557a"
+  "version": "0.1.0"
 }
