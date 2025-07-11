@@ -13,6 +13,11 @@ import Running from '@/assets/running.svg'
 import { history, defaultKeymap, historyKeymap, indentWithTab } from '@codemirror/commands'
 import { indentUnit } from '@codemirror/language'
 import { styling } from '@/components/codemirror-styling'
+import Textarea from '@/components/ui/Textarea.vue'
+import Button from '@/components/ui/Button.vue'
+import Card from '@/components/ui/Card.vue'
+import CardHeader from '@/components/ui/CardHeader.vue'
+import CardContent from '@/components/ui/CardContent.vue'
 
 let worker
 let inputData
@@ -34,7 +39,9 @@ let anchor = ref()
 let parent = ref()
 let input = ref()
 let initialCode = ''
+let code = ref('')
 let editor
+let useCodeMirror = ref(true) // Toggle between CodeMirror and Textarea
 
 onMounted(() => {
   // initialize one worker per session shared by all editor instances
@@ -62,31 +69,46 @@ onMounted(() => {
   initialCode = ''
   codeElement?.setAttribute('hidden', '')
 
-  editor = new EditorView({
-    extensions: [
-      highlightSpecialChars(),
-      history(),
-      drawSelection(),
-      keymap.of([...defaultKeymap, ...historyKeymap, indentWithTab]),
-      lineNumbers(),
-      highlightActiveLine(),
-      indentUnit.of('    '),
-      styling,
-    ],
-    parent: parent.value,
-    doc: localStorage.getItem(storageKey.value) ?? initialCode,
-  })
+  // Initialize CodeMirror editor
+  if (useCodeMirror.value) {
+    editor = new EditorView({
+      extensions: [
+        highlightSpecialChars(),
+        history(),
+        drawSelection(),
+        keymap.of([...defaultKeymap, ...historyKeymap, indentWithTab]),
+        lineNumbers(),
+        highlightActiveLine(),
+        indentUnit.of('    '),
+        styling,
+      ],
+      parent: parent.value,
+      doc: localStorage.getItem(storageKey.value) ?? initialCode,
+    })
+  } else {
+    // Load saved code from localStorage for textarea
+    code.value = localStorage.getItem(storageKey.value) ?? initialCode
+  }
+
   document.addEventListener('visibilitychange', () => {
-    save(editor.state.doc.toString())
+    if (useCodeMirror.value && editor) {
+      save(editor.state.doc.toString())
+    } else {
+      save(code.value)
+    }
   })
 
   mounted.value = true
 })
 
 onUnmounted(() => {
-  save(editor.state.doc.toString())
+  if (useCodeMirror.value && editor) {
+    save(editor.state.doc.toString())
+    editor.destroy()
+  } else {
+    save(code.value)
+  }
   worker.removeEventListener('message', handleMessage)
-  editor.destroy()
 })
 
 async function handleMessage(e) {
@@ -131,12 +153,12 @@ let outputLines = computed(() => {
 })
 
 function run() {
-  let code = editor.state.doc.toString()
-  save(code)
+  let codeToRun = useCodeMirror.value && editor ? editor.state.doc.toString() : code.value
+  save(codeToRun)
   resetOutput()
   running.value = true
   interruptBuffer[0] = 0
-  worker.postMessage({ id: props.id, code })
+  worker.postMessage({ id: props.id, code: codeToRun })
 }
 
 function reset() {
@@ -148,18 +170,22 @@ function reset() {
     return
   }
   localStorage.removeItem(storageKey.value)
-  editor.dispatch({
-    changes: { from: 0, to: editor.state.doc.length, insert: initialCode },
-    selection: { anchor: 0 },
-    scrollIntoView: true,
-  })
-  editor.focus()
+  if (useCodeMirror.value && editor) {
+    editor.dispatch({
+      changes: { from: 0, to: editor.state.doc.length, insert: initialCode },
+      selection: { anchor: 0 },
+      scrollIntoView: true,
+    })
+    editor.focus()
+  } else {
+    code.value = initialCode
+  }
   resetOutput()
 }
 
-function save(code) {
-  if (code === initialCode) localStorage.removeItem(storageKey.value)
-  else localStorage.setItem(storageKey.value, code)
+function save(codeToSave) {
+  if (codeToSave === initialCode) localStorage.removeItem(storageKey.value)
+  else localStorage.setItem(storageKey.value, codeToSave)
 }
 
 let output = ref([])
@@ -197,44 +223,127 @@ function resetOutput() {
   outputRow = 0
   outputCol = 0
 }
+
+function switchEditor() {
+  // Save current code before switching
+  let currentCode = useCodeMirror.value && editor ? editor.state.doc.toString() : code.value
+
+  useCodeMirror.value = !useCodeMirror.value
+
+  if (useCodeMirror.value) {
+    // Switch to CodeMirror
+    nextTick(() => {
+      if (parent.value) {
+        editor = new EditorView({
+          extensions: [
+            highlightSpecialChars(),
+            history(),
+            drawSelection(),
+            keymap.of([...defaultKeymap, ...historyKeymap, indentWithTab]),
+            lineNumbers(),
+            highlightActiveLine(),
+            indentUnit.of('    '),
+            styling,
+          ],
+          parent: parent.value,
+          doc: currentCode,
+        })
+      }
+    })
+  } else {
+    // Switch to Textarea
+    if (editor) {
+      editor.destroy()
+      editor = null
+    }
+    code.value = currentCode
+  }
+}
 </script>
 
 <template>
-  <div ref="anchor" class="wrapper">
-    <div ref="parent" />
-    <button
-      v-if="mounted"
-      class="run"
-      @click="run"
-      :disabled="running || !ready"
-      :title="buttonText"
-    >
-      <span class="sr-only">{{ buttonText }}</span>
-      <Running v-if="running" />
-      <Ready v-else-if="ready" />
-      <Loading v-else />
-    </button>
-  </div>
-  <div class="wrapper">
-    <div class="output">
-      <code v-for="(line, i) in outputLines">
-        {{ line }}<br v-if="i != outputLines.length - 1" />
-      </code>
-      <input
-        v-if="waitingForInput"
-        ref="input"
-        v-model="inputText"
-        @keydown.enter="handleInput"
-        type="text"
-      />
+  <div ref="anchor" class="space-y-4">
+    <!-- Editor Toggle -->
+    <div class="flex justify-between items-center">
+      <h3 class="text-sm font-medium text-muted-foreground">Code Editor</h3>
+      <Button variant="outline" size="sm" @click="switchEditor" class="text-xs">
+        Switch to {{ useCodeMirror ? 'Textarea' : 'CodeMirror' }}
+      </Button>
     </div>
-    <button v-if="mounted" class="reset" @click="reset">
-      {{ running ? 'stop running' : 'reset editor' }}
-    </button>
+
+    <!-- CodeMirror Editor -->
+    <div v-if="useCodeMirror" class="wrapper">
+      <div ref="parent" />
+      <Button
+        v-if="mounted"
+        class="absolute top-3 right-3 w-10 h-10 p-0"
+        variant="outline"
+        @click="run"
+        :disabled="running || !ready"
+        :title="buttonText"
+      >
+        <span class="sr-only">{{ buttonText }}</span>
+        <Running v-if="running" class="w-5 h-5" />
+        <Ready v-else-if="ready" class="w-5 h-5" />
+        <Loading v-else class="w-5 h-5" />
+      </Button>
+    </div>
+
+    <!-- shadcn/vue Textarea Editor -->
+    <Card v-else class="relative">
+      <CardContent class="p-0">
+        <Textarea
+          v-model="code"
+          placeholder="Enter your Python code here..."
+          :rows="15"
+          resize="none"
+          class="min-h-[400px] font-mono text-sm border-0 rounded-none focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-[#1a1a1a] dark:text-[#e5e5e5] dark:placeholder:text-[#8a8a8a]"
+        />
+        <Button
+          v-if="mounted"
+          class="absolute top-3 right-3 w-10 h-10 p-0"
+          variant="outline"
+          @click="run"
+          :disabled="running || !ready"
+          :title="buttonText"
+        >
+          <span class="sr-only">{{ buttonText }}</span>
+          <Running v-if="running" class="w-5 h-5" />
+          <Ready v-else-if="ready" class="w-5 h-5" />
+          <Loading v-else class="w-5 h-5" />
+        </Button>
+      </CardContent>
+    </Card>
+
+    <!-- Output Section -->
+    <Card>
+      <CardHeader class="pb-2">
+        <h3 class="text-sm font-medium text-muted-foreground">Output</h3>
+      </CardHeader>
+      <CardContent class="pt-0">
+        <div class="output-container">
+          <code v-for="(line, i) in outputLines" :key="i" class="output-line">
+            {{ line }}<br v-if="i != outputLines.length - 1" />
+          </code>
+          <input
+            v-if="waitingForInput"
+            ref="input"
+            v-model="inputText"
+            @keydown.enter="handleInput"
+            type="text"
+            class="input-field"
+          />
+        </div>
+        <Button v-if="mounted" variant="ghost" size="sm" class="mt-2 text-xs" @click="reset">
+          {{ running ? 'Stop running' : 'Reset editor' }}
+        </Button>
+      </CardContent>
+    </Card>
   </div>
 </template>
 
 <style scoped>
+/* CodeMirror Styles */
 div.wrapper {
   position: relative;
   margin: 16px -24px;
@@ -287,28 +396,7 @@ div.wrapper {
   background-color: var(--vp-code-line-highlight-color);
 }
 
-button.run {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  border: 1px solid var(--vp-code-copy-code-border-color);
-  border-radius: 4px;
-  background-color: var(--vp-code-copy-code-bg);
-  width: 40px;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: var(--vp-c-brand-1);
-  z-index: 1;
-}
-
-button.run:hover {
-  color: var(--vp-c-brand-2);
-  background-color: var(--vp-code-copy-code-hover-bg);
-  border: 1px solid var(--vp-code-copy-code-hover-border-color);
-}
-
+/* Button Styles */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -321,65 +409,102 @@ button.run:hover {
   border-width: 0;
 }
 
-div.output {
-  background-color: var(--vp-code-block-bg);
-  line-height: var(--vp-code-line-height);
-  margin-top: -8px;
-  padding: 20px 0;
-  box-sizing: content-box;
+/* Output Styles */
+.output-container {
+  background-color: #1a1a1a;
+  border-radius: 6px;
+  padding: 16px;
+  font-family: ui-monospace, 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New',
+    monospace;
+  font-size: 14px;
+  line-height: 1.5;
   overflow: auto;
   white-space: nowrap;
+  min-height: 100px;
+  border: 1px solid #2a2a2a;
 }
 
-div.output:has(input:focus) {
-  outline: 1px solid var(--vp-c-brand-1);
-}
-
-div.output code {
-  color: revert;
+.output-line {
+  color: #e5e5e5;
   background: none;
   width: 100%;
-  padding: 0 24px;
   white-space: pre;
   cursor: default;
+  display: block;
 }
 
-div.output code:last-of-type {
+.output-line:last-of-type {
   width: fit-content;
-  padding-right: 0;
 }
 
-div.output input {
-  font-family: var(--vp-font-family-mono);
-  font-size: var(--vp-code-font-size);
-  box-sizing: content-box;
-  padding-right: 24px;
+.input-field {
+  font-family: ui-monospace, 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New',
+    monospace;
+  font-size: 14px;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #e5e5e5;
+  padding: 0;
+  margin: 0;
+  width: auto;
+  min-width: 1ch;
+}
+
+.input-field:focus {
   outline: none;
 }
 
-div.output input:only-child {
-  padding-left: 24px;
+/* Dark mode specific styles */
+:deep(.dark) .output-container {
+  background-color: #1a1a1a;
+  border-color: #2a2a2a;
 }
 
-button.reset {
-  position: absolute;
-  top: 2px;
-  right: 5px;
-  font-size: 12px;
-  font-weight: 500;
-  padding: 0 3px;
-  text-decoration: underline;
-  color: var(--vp-c-brand-1);
+:deep(.dark) .output-line {
+  color: #e5e5e5;
 }
 
-button.reset:hover {
-  color: var(--vp-c-brand-2);
+:deep(.dark) .input-field {
+  color: #e5e5e5;
 }
 
-button:focus-visible {
-  outline: revert;
+/* Perplexity-style scrollbar */
+.output-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
+.output-container::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+.output-container::-webkit-scrollbar-thumb {
+  background: #3a3a3a;
+  border-radius: 4px;
+}
+
+.output-container::-webkit-scrollbar-thumb:hover {
+  background: #4a4a4a;
+}
+
+/* Textarea styling for Perplexity dark mode */
+:deep(textarea) {
+  background-color: #1a1a1a !important;
+  color: #e5e5e5 !important;
+  border-color: #2a2a2a !important;
+}
+
+:deep(textarea:focus) {
+  border-color: #4a4a4a !important;
+  box-shadow: 0 0 0 2px rgba(74, 74, 74, 0.2) !important;
+}
+
+:deep(textarea::placeholder) {
+  color: #8a8a8a !important;
+}
+
+/* Responsive styles */
 @media (min-width: 640px) {
   div.wrapper {
     margin: 16px 0;

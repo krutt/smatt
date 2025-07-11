@@ -33,7 +33,8 @@ onmessage = async (event: MessageEvent) => {
       postMessage({ id, input: true })
       Atomics.wait(waitFlag, 0, 0)
       const inputArray = new Uint8Array(Number(Atomics.load(inputData, 0)))
-      for (let i = 0; i < inputArray.length; i++) inputArray[i] = Number(Atomics.load(inputData, i + 1))
+      for (let i = 0; i < inputArray.length; i++)
+        inputArray[i] = Number(Atomics.load(inputData, i + 1))
       const inputText = decoder.decode(inputArray)
       postMessage({ id, output: `${inputText}\n` })
       return inputText
