@@ -43,7 +43,28 @@ onmessage = async (event: MessageEvent) => {
     // https://github.com/pyodide/pyodide/issues/703#issuecomment-1937774811
     const dict = pyodide.globals.get('dict')
     const globals = dict()
-    await pyodide.runPythonAsync(code, { filename: '<editor>', globals, locals: globals })
+    const wrappedCode = `
+from ast import AST, Module, Name, Store, dump, parse, walk
+from typing import Iterator
+
+module: Module = parse("""${code}""")
+try:
+  next(filter(lambda node: node.__dict__.get('id', None) == 'print', walk(module)))
+  exec("""${code}""")
+except StopIteration:
+  reversed_walker: Iterator[AST] = reversed(list(walk(module)))
+  try:
+    name: Name = next(
+      filter(
+        lambda node: isinstance(node, Name) and isinstance(node.ctx, Store),
+        reversed_walker
+      )
+    )
+    exec("""${code}\nprint(eval(name.id))""")
+  except StopIteration:
+    exec("""${code}""")    
+`
+    await pyodide.runPythonAsync(wrappedCode, { filename: '<editor>', globals, locals: globals })
     globals.destroy()
     dict.destroy()
   } catch (error) {
