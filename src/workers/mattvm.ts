@@ -44,15 +44,15 @@ onmessage = async (event: MessageEvent) => {
     const dict = pyodide.globals.get('dict')
     const globals = dict()
     const wrappedCode = `
-from ast import AST, Module, Name, Store, dump, parse, walk
-from typing import Iterator
+from ast import AST, Module, Name, Store, parse, walk
+from collections.abc import Iterator
 
 module: Module = parse("""${code}""")
 try:
-  next(filter(lambda node: node.__dict__.get('id', None) == 'print', walk(module)))
+  next(filter(lambda node: isinstance(node, Name) and node.id == 'print', walk(module)))
   exec("""${code}""")
 except StopIteration:
-  reversed_walker: Iterator[AST] = reversed(list(walk(module)))
+  reversed_walker: Iterator[AST] = reversed(tuple(walk(module)))
   try:
     name: Name = next(
       filter(
