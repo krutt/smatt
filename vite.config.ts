@@ -2,9 +2,11 @@
 
 import autoImport from 'unplugin-auto-import/vite'
 import autoprefixer from 'autoprefixer'
-import { copyFile, mkdir } from 'fs/promises'
+import { mkdir, readFile, writeFile } from 'fs/promises'
 import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
+import { gzip } from 'zlib'
+import { promisify } from 'node:util'
 import { resolve } from 'path'
 import svgLoader from 'vite-svg-loader'
 import tailwind from 'tailwindcss'
@@ -44,8 +46,13 @@ export default defineConfig({
         let assetsDir = 'dist/assets'
         await mkdir(assetsDir, { recursive: true })
         let files = ['pyodide-lock.json', 'pyodide.asm.js', 'pyodide.asm.wasm', 'python_stdlib.zip']
-        let modulePath = resolve(__dirname, './node_modules/pyodide/')
-        for (let file of files) await copyFile(resolve(modulePath, file), resolve(assetsDir, file))
+        let gzipAsync = promisify(gzip)
+        let modulePath = resolve(__dirname, './static/')
+        for (let file of files) {
+          let buffer = await readFile(resolve(modulePath, file))
+          let compressed = await gzipAsync(buffer)
+          await writeFile(resolve(assetsDir, file), compressed)
+        }
       },
       name: 'vite-pyodide',
     },
