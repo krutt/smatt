@@ -62,7 +62,7 @@ except StopIteration:
     )
     exec("""${code}\nprint(eval(name.id))""")
   except StopIteration:
-    exec("""${code}""")    
+    exec("""${code}""")
 `
     await pyodide.runPythonAsync(wrappedCode, { filename: '<editor>', globals, locals: globals })
     globals.destroy()
